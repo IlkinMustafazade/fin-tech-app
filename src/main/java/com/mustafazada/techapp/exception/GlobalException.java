@@ -19,11 +19,16 @@ public class GlobalException {
 
     @ExceptionHandler(value = InvalidDTO.class)
     public ResponseEntity<?> invalidDto(InvalidDTO invalidDTO) {
-        return new ResponseEntity<>(invalidDTO.getResponseDTO(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(invalidDTO.getResponseDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(value = UserAlreadyExist.class)
     public ResponseEntity<?> userExist(UserAlreadyExist userAlreadyExist) {
         return new ResponseEntity<>(userAlreadyExist.getResponseDTO(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(value = NoSuchUserExistException.class)
+    public ResponseEntity<?> notFoundUser(NoSuchUserExistException noSuchUserExistException) {
+        return new ResponseEntity<>(noSuchUserExistException.getResponseDTO(), HttpStatus.NOT_FOUND);
     }
 }

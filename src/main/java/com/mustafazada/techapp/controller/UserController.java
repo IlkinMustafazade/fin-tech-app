@@ -1,5 +1,6 @@
 package com.mustafazada.techapp.controller;
 
+import com.mustafazada.techapp.dto.request.AuthenticationRequestDTO;
 import com.mustafazada.techapp.dto.request.UserRequestDTO;
 import com.mustafazada.techapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     @Autowired
     private UserService userService;
-@PostMapping("/register")
+
+    @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody UserRequestDTO userRequestDTO) {
         return new ResponseEntity<>(userService.saveUser(userRequestDTO), HttpStatus.OK);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@RequestBody AuthenticationRequestDTO authenticationRequestDTO) {
+        return new ResponseEntity<>(userService.loginUser(authenticationRequestDTO), HttpStatus.OK);
     }
 }
