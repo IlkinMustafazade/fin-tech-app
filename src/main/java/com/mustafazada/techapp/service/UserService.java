@@ -1,15 +1,20 @@
 package com.mustafazada.techapp.service;
 
+import com.mustafazada.techapp.dto.request.AuthenticationRequestDTO;
 import com.mustafazada.techapp.dto.request.UserRequestDTO;
 import com.mustafazada.techapp.dto.response.CommonResponseDTO;
 import com.mustafazada.techapp.dto.response.Status;
 import com.mustafazada.techapp.dto.response.StatusCode;
 import com.mustafazada.techapp.dto.response.UserResponseDTO;
 import com.mustafazada.techapp.entity.TechUser;
+import com.mustafazada.techapp.exception.NoSuchUserExistException;
 import com.mustafazada.techapp.exception.UserAlreadyExist;
 import com.mustafazada.techapp.repository.UserRepository;
 import com.mustafazada.techapp.util.DTOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,6 +24,12 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     public CommonResponseDTO<?> saveUser(UserRequestDTO userRequestDTO) {
         dtoUtil.isValid(userRequestDTO);
@@ -33,7 +44,7 @@ public class UserService {
         TechUser user = TechUser.builder()
                 .name(userRequestDTO.getName())
                 .surname(userRequestDTO.getSurname())
-                .password(userRequestDTO.getPassword())
+                .password(passwordEncoder.encode(userRequestDTO.getPassword()))
                 .pin(userRequestDTO.getPin())
                 .role("ROLE_USER").build();
 
@@ -43,5 +54,29 @@ public class UserService {
                         .statusCode(StatusCode.SUCCESS)
                         .message("User Created").build())
                 .data(UserResponseDTO.entityResponse(userRepository.save(user))).build();
+    }
+
+
+    public CommonResponseDTO<?> loginUser(AuthenticationRequestDTO authenticationRequestDTO) {
+        dtoUtil.isValid(authenticationRequestDTO);
+
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken
+                    (
+                            authenticationRequestDTO.getPin(),
+                            authenticationRequestDTO.getPassword()
+                    ));
+
+        } catch (Exception e) {
+            throw NoSuchUserExistException.builder()
+                    .responseDTO(CommonResponseDTO.builder()
+                            .status(Status.builder().statusCode(StatusCode.USER_NOT_EXSIT)
+                                    .message("There is no user whit this pin: " + authenticationRequestDTO.getPin())
+                                    .build()).build()).build();
+        }
+
+        return CommonResponseDTO.builder()
+                .data(authenticationRequestDTO)
+                .status(Status.builder().statusCode(StatusCode.SUCCESS).message("Welcome").build()).build();
     }
 }
