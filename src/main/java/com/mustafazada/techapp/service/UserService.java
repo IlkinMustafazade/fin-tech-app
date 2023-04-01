@@ -1,11 +1,9 @@
 package com.mustafazada.techapp.service;
 
+import com.mustafazada.techapp.confiq.security.JwtUtil;
 import com.mustafazada.techapp.dto.request.AuthenticationRequestDTO;
 import com.mustafazada.techapp.dto.request.UserRequestDTO;
-import com.mustafazada.techapp.dto.response.CommonResponseDTO;
-import com.mustafazada.techapp.dto.response.Status;
-import com.mustafazada.techapp.dto.response.StatusCode;
-import com.mustafazada.techapp.dto.response.UserResponseDTO;
+import com.mustafazada.techapp.dto.response.*;
 import com.mustafazada.techapp.entity.TechUser;
 import com.mustafazada.techapp.exception.NoSuchUserExistException;
 import com.mustafazada.techapp.exception.UserAlreadyExist;
@@ -14,6 +12,8 @@ import com.mustafazada.techapp.util.DTOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +30,12 @@ public class UserService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     public CommonResponseDTO<?> saveUser(UserRequestDTO userRequestDTO) {
         dtoUtil.isValid(userRequestDTO);
@@ -75,8 +81,12 @@ public class UserService {
                                     .build()).build()).build();
         }
 
+        UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequestDTO.getPin());
+
         return CommonResponseDTO.builder()
-                .data(authenticationRequestDTO)
-                .status(Status.builder().statusCode(StatusCode.SUCCESS).message("Welcome").build()).build();
+                .data(AuthenticationResponseDTO.builder().tokenForUser(jwtUtil.createToken(userDetails))
+                        .build())
+                .status(Status.builder().statusCode(StatusCode.SUCCESS).message("Token was created successfully")
+                        .build()).build();
     }
 }
