@@ -16,6 +16,7 @@ import com.mustafazada.techapp.util.DTOCheckUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,25 +28,26 @@ import java.util.stream.Collectors;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserRegisterService {
     AccountRepository accountRepository;
+    PasswordEncoder passwordEncoder;
     UserRepository userRepository;
     DTOCheckUtil dtoCheckUtil;
 
-    public CommonResponseDTO<?> saveUser(UserRequestDTO userRequestDTO){
+    public CommonResponseDTO<?> saveUser(UserRequestDTO userRequestDTO) {
         dtoCheckUtil.isValid(userRequestDTO);
-       checkUserExist(userRequestDTO);
-       checkAccountExist(userRequestDTO);
+        checkUserExist(userRequestDTO);
+        checkAccountExist(userRequestDTO);
         TechUser user = createUserEntity(userRequestDTO);
         TechUser savedUser = userRepository.save(user);
 
         return CommonResponseDTO.builder().status(Status.builder()
-                        .statusCode(StatusCode.SUCCESS)
-                        .message("Registration has been SUCCESSFULLY completed")
+                .statusCode(StatusCode.SUCCESS)
+                .message("Registration has been SUCCESSFULLY completed")
                 .build()).data(UserResponseDTO.entityResponse(savedUser)).build();
     }
 
-    private void checkUserExist(UserRequestDTO userRequestDTO){
+    private void checkUserExist(UserRequestDTO userRequestDTO) {
         Optional<TechUser> userRepositoryByPin = userRepository.findByPin(userRequestDTO.getPin());
-        if(userRepositoryByPin.isPresent()){
+        if (userRepositoryByPin.isPresent()) {
             throw UserAlreadyExistException.builder().responseDTO(CommonResponseDTO.builder().status(Status.builder()
                     .statusCode(StatusCode.ALREADY_EXIST)
                     .message("User with pin: " + userRequestDTO.getPin()
@@ -54,11 +56,11 @@ public class UserRegisterService {
         }
     }
 
-    private TechUser createUserEntity(UserRequestDTO userRequestDTO){
+    private TechUser createUserEntity(UserRequestDTO userRequestDTO) {
         TechUser user = TechUser.builder()
                 .name(userRequestDTO.getName())
                 .surname(userRequestDTO.getSurname())
-                .password(userRequestDTO.getPassword())
+                .password(passwordEncoder.encode(userRequestDTO.getPassword()))
                 .pin(userRequestDTO.getPin())
                 .role("USER_ROLE")
                 .build();
@@ -66,7 +68,7 @@ public class UserRegisterService {
         return user;
     }
 
-    private void checkAccountExist(UserRequestDTO userRequestDTO){
+    private void checkAccountExist(UserRequestDTO userRequestDTO) {
         List<Integer> accountNoList = accountRepository.findAll()
                 .stream()
                 .map(Account::getAccountNo)
@@ -82,7 +84,7 @@ public class UserRegisterService {
                             .responseDTO(CommonResponseDTO.builder().status(Status.builder()
                                     .statusCode(StatusCode.ALREADY_EXIST)
                                     .message("Duplicate account number found: " + duplicateAccountNo)
-                            .build()).build()).build();
+                                    .build()).build()).build();
                 });
     }
 }

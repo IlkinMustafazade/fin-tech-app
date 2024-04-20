@@ -1,6 +1,8 @@
 package com.mustafazada.techapp.controller;
 
+import com.mustafazada.techapp.dto.request.AuthenticationRequestDTO;
 import com.mustafazada.techapp.dto.request.UserRequestDTO;
+import com.mustafazada.techapp.service.UserLoginService;
 import com.mustafazada.techapp.service.UserRegisterService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +20,15 @@ import org.springframework.web.bind.annotation.RestController;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserController {
     UserRegisterService userRegisterService;
+    UserLoginService userLoginService;
 
     @PostMapping("/registration")
-    public ResponseEntity<?> registerUser(@RequestBody UserRequestDTO userRequestDTO){
+    public ResponseEntity<?> registerUser(@RequestBody UserRequestDTO userRequestDTO) {
         return new ResponseEntity<>(userRegisterService.saveUser(userRequestDTO), HttpStatus.CREATED);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@RequestBody AuthenticationRequestDTO authenticationRequestDTO) {
+        return new ResponseEntity<>(userLoginService.loginUser(authenticationRequestDTO), HttpStatus.OK);
+    }
 }
