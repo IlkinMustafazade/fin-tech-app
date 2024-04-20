@@ -11,6 +11,6 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @EqualsAndHashCode(callSuper = false)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class InvalidDTOException extends RuntimeException {
+public class NoSuchUserExistException extends RuntimeException {
     CommonResponseDTO<?> responseDTO;
 }

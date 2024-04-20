@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class ApplicationConfig {
 
     @Bean
-    public Logger logger(){
+    public Logger logger() {
         return LoggerFactory.getLogger(getClass().getName());
     }
 }

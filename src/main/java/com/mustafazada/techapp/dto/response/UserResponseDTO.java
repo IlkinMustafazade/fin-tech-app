@@ -25,13 +25,13 @@ public class UserResponseDTO implements Serializable {
     String role;
     List<AccountRequestDTO> accountRequestDTOList;
 
-    public  static UserResponseDTO entityResponse(TechUser user){
+    public static UserResponseDTO entityResponse(TechUser user) {
         List<AccountRequestDTO> accountList = new ArrayList<>();
         user.getAccountList().forEach(account -> accountList.add(AccountRequestDTO.builder()
-                        .balance(account.getBalance())
-                        .currency(account.getCurrency())
-                        .isActive(account.getIsActive())
-                        .accountNo(account.getAccountNo()).build()));
+                .balance(account.getBalance())
+                .currency(account.getCurrency())
+                .isActive(account.getIsActive())
+                .accountNo(account.getAccountNo()).build()));
 
         return UserResponseDTO.builder()
                 .id(user.getId())

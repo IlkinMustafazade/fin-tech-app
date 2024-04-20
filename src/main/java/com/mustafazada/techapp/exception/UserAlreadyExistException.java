@@ -9,8 +9,8 @@ import lombok.experimental.FieldDefaults;
 
 @Data
 @Builder
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserAlreadyExistException extends RuntimeException{
+public class UserAlreadyExistException extends RuntimeException {
     CommonResponseDTO<?> responseDTO;
 }

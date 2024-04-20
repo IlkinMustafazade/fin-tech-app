@@ -1,4 +1,4 @@
-package com.mustafazada.techapp.dto.response;
+package com.mustafazada.techapp.dto.request;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,10 +10,9 @@ import java.io.Serializable;
 @Data
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Status implements Serializable {
+public class AuthenticationRequestDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    StatusCode statusCode;
-    String message;
-
+    String pin;
+    String password;
 }

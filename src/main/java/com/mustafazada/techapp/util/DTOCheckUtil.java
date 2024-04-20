@@ -1,5 +1,6 @@
 package com.mustafazada.techapp.util;
 
+import com.mustafazada.techapp.dto.request.AuthenticationRequestDTO;
 import com.mustafazada.techapp.dto.request.UserRequestDTO;
 import com.mustafazada.techapp.dto.response.CommonResponseDTO;
 import com.mustafazada.techapp.dto.response.Status;
@@ -20,7 +21,7 @@ public class DTOCheckUtil {
 
     Logger logger;
 
-    public void isValid(UserRequestDTO userRequestDTO){
+    public void isValid(UserRequestDTO userRequestDTO) {
         checkDTOInput(userRequestDTO.getName());
         checkDTOInput(userRequestDTO.getSurname());
         checkDTOInput(userRequestDTO.getPassword());
@@ -29,8 +30,13 @@ public class DTOCheckUtil {
 
     }
 
-    private <T> void checkDTOInput(T t){
-        if (Objects.isNull(t) || t.toString().isBlank()){
+    public void isValid(AuthenticationRequestDTO authenticationRequestDTO) {
+        checkDTOInput(authenticationRequestDTO.getPin());
+        checkDTOInput(authenticationRequestDTO.getPassword());
+    }
+
+    private <T> void checkDTOInput(T t) {
+        if (Objects.isNull(t) || t.toString().isBlank()) {
             logger.error("DTO input is null or empty");
             throw InvalidDTOException.builder().responseDTO(CommonResponseDTO.builder().status(Status.builder()
                     .statusCode(StatusCode.INVALID_DTO)

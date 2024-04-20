@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandling {
 
     @ExceptionHandler(value = Exception.class)
-    public ResponseEntity<?> internalError(Exception e){
+    public ResponseEntity<?> internalError(Exception e) {
         e.printStackTrace();
         return new ResponseEntity<>
                 (
@@ -24,17 +24,27 @@ public class GlobalExceptionHandling {
     }
 
     @ExceptionHandler(value = InvalidDTOException.class)
-    public ResponseEntity<?> invalidDTO(InvalidDTOException invalidDTOException){
+    public ResponseEntity<?> invalidDTO(InvalidDTOException invalidDTOException) {
         return new ResponseEntity<>(invalidDTOException.getResponseDTO(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = UserAlreadyExistException.class)
-    public ResponseEntity<?> userExist(UserAlreadyExistException userAlreadyExistException){
+    public ResponseEntity<?> userExist(UserAlreadyExistException userAlreadyExistException) {
         return new ResponseEntity<>(userAlreadyExistException.getResponseDTO(), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(value = AccountAlreadyExistException.class)
-    public ResponseEntity<?> accountExist(AccountAlreadyExistException accountAlreadyExistException){
+    public ResponseEntity<?> accountExist(AccountAlreadyExistException accountAlreadyExistException) {
         return new ResponseEntity<>(accountAlreadyExistException.getResponseDTO(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(value = NoSuchUserExistException.class)
+    public ResponseEntity<?> userNotExist(NoSuchUserExistException noSuchUserExistException) {
+        return new ResponseEntity<>(noSuchUserExistException.getResponseDTO(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = BadInputCredentialsException.class)
+    public ResponseEntity<?> badCredentials(BadInputCredentialsException badInputCredentialsException) {
+        return new ResponseEntity<>(badInputCredentialsException.getResponseDTO(), HttpStatus.UNAUTHORIZED);
     }
 }
