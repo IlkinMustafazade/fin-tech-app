@@ -1,0 +1,14 @@
+package com.mustafazada.techapp.dto.response;
+
+public enum StatusCode {
+    INVALID_DTO,
+    ALREADY_EXIST,
+    SUCCESS,
+    USER_NOT_EXIST,
+    BAD_CREDENTIALS,
+    NOT_ACTIVE_ACCOUNT,
+    INVALID_AMOUNT,
+    EQUAL_ACCOUNT,
+    INSUFFICIENT_BALANCE,
+    ACCOUNT_NOT_EXIST, INVALID_TOKEN, CBAR_ERROR, INTERNAL_ERROR
+}
