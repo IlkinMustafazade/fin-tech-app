@@ -82,4 +82,9 @@ public class GlobalExceptionHandling {
     public ResponseEntity<?> notTiedUser(NoTiedTokenException noTiedTokenException) {
         return new ResponseEntity<>(noTiedTokenException.getResponseDTO(), HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler(value = CbarRestException.class)
+    public ResponseEntity<?> cbarError(CbarRestException cbarRestException) {
+        return new ResponseEntity<>(cbarRestException.getResponseDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

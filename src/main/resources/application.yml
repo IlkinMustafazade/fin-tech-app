@@ -11,3 +11,4 @@ spring:
     hibernate:
       ddl-auto: update
 SECRET_KEY: ^rr4^jwksp_qev6jz_xxun4(mv)w-@48c!$v!f)e_)%2o&ldpg
+URL_MB: https://www.cbar.az/currencies/%s.xml
