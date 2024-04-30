@@ -52,4 +52,34 @@ public class GlobalExceptionHandling {
     public ResponseEntity<?> notActiveAccount(NotActiveAccountException notActiveAccountException) {
         return new ResponseEntity<>(notActiveAccountException.getResponseDTO(), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(value = InvalidAmountException.class)
+    public ResponseEntity<?> invalidAmount(InvalidAmountException invalidAmountException) {
+        return new ResponseEntity<>(invalidAmountException.getResponseDTO(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = EqualAccountException.class)
+    public ResponseEntity<?> sameAccount(EqualAccountException equalAccountException) {
+        return new ResponseEntity<>(equalAccountException.getResponseDTO(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = InsufficientBalanceException.class)
+    public ResponseEntity<?> insufficientBalance(InsufficientBalanceException insufficientBalanceException) {
+        return new ResponseEntity<>(insufficientBalanceException.getResponseDTO(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = NotAccountExistException.class)
+    public ResponseEntity<?> accountNotExist(NotAccountExistException notAccountExistException) {
+        return new ResponseEntity<>(notAccountExistException.getResponseDTO(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = InvalidTokenException.class)
+    public ResponseEntity<?> invalidToken(InvalidTokenException invalidTokenException) {
+        return new ResponseEntity<>(invalidTokenException.getResponseDTO(), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(value = NoTiedTokenException.class)
+    public ResponseEntity<?> notTiedUser(NoTiedTokenException noTiedTokenException) {
+        return new ResponseEntity<>(noTiedTokenException.getResponseDTO(), HttpStatus.FORBIDDEN);
+    }
 }
