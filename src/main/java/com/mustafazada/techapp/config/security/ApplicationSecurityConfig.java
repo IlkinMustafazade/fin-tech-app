@@ -1,17 +1,26 @@
 package com.mustafazada.techapp.config.security;
 
+import io.jsonwebtoken.Jws;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ApplicationSecurityConfig {
+    JWTFilter jwtFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -37,6 +46,7 @@ public class ApplicationSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
         try {
+            httpSecurity.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
             return httpSecurity
                     .csrf()
                     .disable()
@@ -46,6 +56,8 @@ public class ApplicationSecurityConfig {
                     .anyRequest()
                     .authenticated()
                     .and().headers()
+                    .and().sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and().formLogin().disable().build();
         } catch (Exception e) {
             e.printStackTrace();
