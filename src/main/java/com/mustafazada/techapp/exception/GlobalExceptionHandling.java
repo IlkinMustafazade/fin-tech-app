@@ -82,4 +82,9 @@ public class GlobalExceptionHandling {
     public ResponseEntity<?> insufficientBalance(NoTiedTokenException noTiedTokenException) {
         return new ResponseEntity<>(noTiedTokenException.getResponseDTO(), HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler(value = CbarRestException.class)
+    public ResponseEntity<?> insufficientBalance(CbarRestException cbarRestException) {
+        return new ResponseEntity<>(cbarRestException.getResponseDTO(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
