@@ -13,5 +13,5 @@ public enum StatusCode {
     ACCOUNT_NOT_EXIST,
     INVALID_TOKEN,
     NOT_TIED_USER,
-    INTERNAL_ERROR
+    CBAR_ERROR, INTERNAL_ERROR
 }

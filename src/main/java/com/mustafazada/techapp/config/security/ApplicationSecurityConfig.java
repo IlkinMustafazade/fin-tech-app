@@ -51,7 +51,7 @@ public class ApplicationSecurityConfig {
                     .csrf()
                     .disable()
                     .authorizeRequests()
-                    .antMatchers("/api/v1/registration", "/api/v1/login")
+                    .antMatchers("/api/v1/registration", "/api/v1/login", "/api/v1/currencies")
                     .permitAll()
                     .anyRequest()
                     .authenticated()
