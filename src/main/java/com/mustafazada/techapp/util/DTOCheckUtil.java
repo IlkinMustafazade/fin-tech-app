@@ -1,5 +1,6 @@
 package com.mustafazada.techapp.util;
 
+import com.mustafazada.techapp.dto.request.AccountToAccountRequestDTO;
 import com.mustafazada.techapp.dto.request.AuthenticationRequestDTO;
 import com.mustafazada.techapp.dto.request.UserRequestDTO;
 import com.mustafazada.techapp.dto.response.CommonResponseDTO;
@@ -31,6 +32,12 @@ public class DTOCheckUtil {
     public void isValid(AuthenticationRequestDTO authenticationRequestDTO) {
         checkDTOInput(authenticationRequestDTO.getPin());
         checkDTOInput(authenticationRequestDTO.getPassword());
+    }
+
+    public void isValid(AccountToAccountRequestDTO requestDTO) {
+        checkDTOInput(requestDTO.getDebitAccountNo());
+        checkDTOInput(requestDTO.getCreditAccountNo());
+        checkDTOInput(requestDTO.getAmount());
     }
 
     private <T> void checkDTOInput(T t) {
